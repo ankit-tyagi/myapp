@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/models.dart';
 import 'package:intl/intl.dart';
+import 'package:myapp/screens/edit_fuel_entry_screen.dart';
 
 class LogsScreen extends StatefulWidget {
   const LogsScreen({super.key});
@@ -41,6 +42,15 @@ class LogsScreenState extends State<LogsScreen> {
           ],
         );
       },
+    );
+  }
+
+  void _editEntry(BuildContext context, FuelEntry entry) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditFuelEntryScreen(entry: entry),
+      ),
     );
   }
 
@@ -101,9 +111,18 @@ class LogsScreenState extends State<LogsScreen> {
                         subtitle: Text(
                           '${vehicle?.name ?? 'N/A'}: ${entry.fuelQuantity} L at \$${entry.pricePerUnit?.toStringAsFixed(2)} - Odo: ${entry.odometer} km',
                         ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.redAccent),
-                          onPressed: () => _deleteEntry(context, entry),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.grey),
+                              onPressed: () => _editEntry(context, entry),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.redAccent),
+                              onPressed: () => _deleteEntry(context, entry),
+                            ),
+                          ],
                         ),
                       ),
                     );

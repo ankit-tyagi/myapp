@@ -12,6 +12,21 @@ class Vehicle extends HiveObject {
 
   @HiveField(2)
   String? mileageUnit;
+
+  @HiveField(3)
+  String? make;
+
+  @HiveField(4)
+  String? model;
+
+  @HiveField(5)
+  int? year;
+
+  @HiveField(6)
+  String? licensePlate;
+
+  @HiveField(7)
+  String? imagePath;
 }
 
 @HiveType(typeId: 2)

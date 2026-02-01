@@ -93,7 +93,6 @@ class AddVehicleFormState extends State<AddVehicleForm> {
                   value == null || value.isEmpty ? 'Please enter a name' : null,
             ),
             DropdownButtonFormField<String>(
-              value: _fuelType,
               decoration: const InputDecoration(labelText: 'Fuel Type'),
               items: ['Gasoline', 'Diesel', 'Electric', 'Hybrid']
                   .map((label) => DropdownMenuItem(
@@ -108,9 +107,9 @@ class AddVehicleFormState extends State<AddVehicleForm> {
                   });
                 }
               },
+              initialValue: _fuelType,
             ),
             DropdownButtonFormField<String>(
-              value: _mileageUnit,
               decoration: const InputDecoration(labelText: 'Mileage Unit'),
               items: ['Kilometers', 'Miles']
                   .map((label) => DropdownMenuItem(
@@ -125,6 +124,7 @@ class AddVehicleFormState extends State<AddVehicleForm> {
                   });
                 }
               },
+              initialValue: _mileageUnit,
             ),
           ],
         ),

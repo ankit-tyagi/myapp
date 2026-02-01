@@ -19,19 +19,34 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
     return Vehicle()
       ..name = fields[0] as String
       ..fuelType = fields[1] as String?
-      ..mileageUnit = fields[2] as String?;
+      ..mileageUnit = fields[2] as String?
+      ..make = fields[3] as String?
+      ..model = fields[4] as String?
+      ..year = fields[5] as int?
+      ..licensePlate = fields[6] as String?
+      ..imagePath = fields[7] as String?;
   }
 
   @override
   void write(BinaryWriter writer, Vehicle obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
       ..write(obj.fuelType)
       ..writeByte(2)
-      ..write(obj.mileageUnit);
+      ..write(obj.mileageUnit)
+      ..writeByte(3)
+      ..write(obj.make)
+      ..writeByte(4)
+      ..write(obj.model)
+      ..writeByte(5)
+      ..write(obj.year)
+      ..writeByte(6)
+      ..write(obj.licensePlate)
+      ..writeByte(7)
+      ..write(obj.imagePath);
   }
 
   @override

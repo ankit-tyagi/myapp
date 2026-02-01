@@ -3,19 +3,21 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/models.dart';
 
-class AddFuelEntryScreen extends StatefulWidget {
-  const AddFuelEntryScreen({super.key});
+class EditFuelEntryScreen extends StatefulWidget {
+  final FuelEntry entry;
+
+  const EditFuelEntryScreen({super.key, required this.entry});
 
   @override
-  AddFuelEntryScreenState createState() => AddFuelEntryScreenState();
+  EditFuelEntryScreenState createState() => EditFuelEntryScreenState();
 }
 
-class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
+class EditFuelEntryScreenState extends State<EditFuelEntryScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _odometerController = TextEditingController();
-  final _fuelQuantityController = TextEditingController();
-  final _pricePerUnitController = TextEditingController();
-  final _totalCostController = TextEditingController();
+  late TextEditingController _odometerController;
+  late TextEditingController _fuelQuantityController;
+  late TextEditingController _pricePerUnitController;
+  late TextEditingController _totalCostController;
 
   late DateTime _selectedDate;
   Vehicle? _selectedVehicle;
@@ -24,12 +26,16 @@ class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = DateTime.now();
-    _vehicles = Hive.box<Vehicle>('vehicles').values.toList();
-    // Initialize with a default vehicle if available
-    if (_vehicles.isNotEmpty) {
-      _selectedVehicle = _vehicles.first;
-    }
+
+    final vehicleBox = Hive.box<Vehicle>('vehicles');
+    _vehicles = vehicleBox.values.toList();
+    _selectedVehicle = vehicleBox.get(widget.entry.vehicleId);
+
+    _odometerController = TextEditingController(text: widget.entry.odometer.toString());
+    _fuelQuantityController = TextEditingController(text: widget.entry.fuelQuantity.toString());
+    _pricePerUnitController = TextEditingController(text: widget.entry.pricePerUnit?.toString() ?? '');
+    _totalCostController = TextEditingController(text: widget.entry.totalCost?.toString() ?? '');
+    _selectedDate = widget.entry.date;
 
     // Add listeners to auto-calculate total cost
     _fuelQuantityController.addListener(_calculateTotalCost);
@@ -68,25 +74,14 @@ class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
 
   void _saveEntry() {
     if (_formKey.currentState!.validate()) {
-      if (_selectedVehicle == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please add a vehicle in the garage first.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
+      widget.entry.vehicleId = _selectedVehicle!.key as int;
+      widget.entry.date = _selectedDate;
+      widget.entry.odometer = double.parse(_odometerController.text);
+      widget.entry.fuelQuantity = double.parse(_fuelQuantityController.text);
+      widget.entry.pricePerUnit = double.tryParse(_pricePerUnitController.text);
+      widget.entry.totalCost = double.tryParse(_totalCostController.text);
 
-      final newEntry = FuelEntry()
-        ..vehicleId = _selectedVehicle!.key as int
-        ..date = _selectedDate
-        ..odometer = double.parse(_odometerController.text)
-        ..fuelQuantity = double.parse(_fuelQuantityController.text)
-        ..pricePerUnit = double.tryParse(_pricePerUnitController.text)
-        ..totalCost = double.tryParse(_totalCostController.text);
-
-      Hive.box<FuelEntry>('fuel_entries').add(newEntry);
+      widget.entry.save();
 
       Navigator.pop(context);
     }
@@ -96,7 +91,7 @@ class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Fuel Entry'),
+        title: const Text('Edit Fuel Entry'),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
@@ -131,8 +126,7 @@ class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
                     _selectedVehicle = newValue;
                   });
                 },
-                validator: (value) =>
-                    value == null ? 'Please select a vehicle' : null,
+                validator: (value) => value == null ? 'Please select a vehicle' : null,
               ),
               const SizedBox(height: 16),
 
@@ -170,7 +164,7 @@ class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the fuel quantity';
                   }
-                   if (double.tryParse(value) == null) {
+                  if (double.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   return null;
@@ -224,7 +218,7 @@ class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
               // Save Button
               ElevatedButton.icon(
                 icon: const Icon(Icons.save),
-                label: const Text('Save Entry'),
+                label: const Text('Save Changes'),
                 onPressed: _saveEntry,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
