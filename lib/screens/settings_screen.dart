@@ -7,9 +7,14 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:myapp/models.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   void _exportData(BuildContext context) async {
     final vehicleBox = Hive.box<Vehicle>('vehicles');
     final fuelBox = Hive.box<FuelEntry>('fuel_entries');
@@ -37,6 +42,7 @@ class SettingsScreen extends StatelessWidget {
     String csv = const ListToCsvConverter().convert(rows);
     await file.writeAsString(csv);
 
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Data exported to $path')),
     );
@@ -59,6 +65,7 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () async {
                 await Hive.box<Vehicle>('vehicles').clear();
                 await Hive.box<FuelEntry>('fuel_entries').clear();
+                if (!mounted) return;
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('All data has been cleared.')),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -8,10 +7,10 @@ class AddFuelEntryScreen extends StatefulWidget {
   const AddFuelEntryScreen({super.key});
 
   @override
-  _AddFuelEntryScreenState createState() => _AddFuelEntryScreenState();
+  AddFuelEntryScreenState createState() => AddFuelEntryScreenState();
 }
 
-class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
+class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
   final _formKey = GlobalKey<FormState>();
   final _odometerController = TextEditingController();
   final _fuelQuantityController = TextEditingController();
@@ -80,7 +79,7 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
       }
 
       final newEntry = FuelEntry()
-        ..vehicleId = _selectedVehicle!.key
+        ..vehicleId = _selectedVehicle!.key as int
         ..date = _selectedDate
         ..odometer = double.parse(_odometerController.text)
         ..fuelQuantity = double.parse(_fuelQuantityController.text)

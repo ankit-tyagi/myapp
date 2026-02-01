@@ -6,10 +6,10 @@ class GarageScreen extends StatefulWidget {
   const GarageScreen({super.key});
 
   @override
-  _GarageScreenState createState() => _GarageScreenState();
+  GarageScreenState createState() => GarageScreenState();
 }
 
-class _GarageScreenState extends State<GarageScreen> {
+class GarageScreenState extends State<GarageScreen> {
   void _showAddVehicleDialog() {
     showDialog(
       context: context,
@@ -57,8 +57,8 @@ class _GarageScreenState extends State<GarageScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddVehicleDialog,
-        child: const Icon(Icons.add),
         tooltip: 'Add Vehicle',
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -68,10 +68,10 @@ class AddVehicleForm extends StatefulWidget {
   const AddVehicleForm({super.key});
 
   @override
-  _AddVehicleFormState createState() => _AddVehicleFormState();
+  AddVehicleFormState createState() => AddVehicleFormState();
 }
 
-class _AddVehicleFormState extends State<AddVehicleForm> {
+class AddVehicleFormState extends State<AddVehicleForm> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   String _fuelType = 'Gasoline';
@@ -131,13 +131,12 @@ class _AddVehicleFormState extends State<AddVehicleForm> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
           },
+          child: const Text('Cancel'),
         ),
         TextButton(
-          child: const Text('Save'),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               final newVehicle = Vehicle()
@@ -150,6 +149,7 @@ class _AddVehicleFormState extends State<AddVehicleForm> {
               Navigator.of(context).pop();
             }
           },
+          child: const Text('Save'),
         ),
       ],
     );
