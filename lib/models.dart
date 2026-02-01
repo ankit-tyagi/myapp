@@ -2,19 +2,19 @@ import 'package:hive/hive.dart';
 
 part 'models.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class Vehicle extends HiveObject {
   @HiveField(0)
   late String name;
 
   @HiveField(1)
-  late String fuelType;
+  String? fuelType;
 
   @HiveField(2)
-  late String mileageUnit;
+  String? mileageUnit;
 }
 
-@HiveType(typeId: 1)
+@HiveType(typeId: 2)
 class FuelEntry extends HiveObject {
   @HiveField(0)
   late int vehicleId;
@@ -29,11 +29,8 @@ class FuelEntry extends HiveObject {
   late double fuelQuantity;
 
   @HiveField(4)
-  late double? pricePerUnit;
+  double? pricePerUnit;
 
   @HiveField(5)
-  late double? totalCost;
-
-  @HiveField(6)
-  late double? calculatedMileage;
+  double? totalCost;
 }

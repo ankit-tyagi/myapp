@@ -8,7 +8,7 @@ part of 'models.dart';
 
 class VehicleAdapter extends TypeAdapter<Vehicle> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
   Vehicle read(BinaryReader reader) {
@@ -18,8 +18,8 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
     };
     return Vehicle()
       ..name = fields[0] as String
-      ..fuelType = fields[1] as String
-      ..mileageUnit = fields[2] as String;
+      ..fuelType = fields[1] as String?
+      ..mileageUnit = fields[2] as String?;
   }
 
   @override
@@ -47,7 +47,7 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
 
 class FuelEntryAdapter extends TypeAdapter<FuelEntry> {
   @override
-  final int typeId = 1;
+  final int typeId = 2;
 
   @override
   FuelEntry read(BinaryReader reader) {
@@ -61,14 +61,13 @@ class FuelEntryAdapter extends TypeAdapter<FuelEntry> {
       ..odometer = fields[2] as double
       ..fuelQuantity = fields[3] as double
       ..pricePerUnit = fields[4] as double?
-      ..totalCost = fields[5] as double?
-      ..calculatedMileage = fields[6] as double?;
+      ..totalCost = fields[5] as double?;
   }
 
   @override
   void write(BinaryWriter writer, FuelEntry obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.vehicleId)
       ..writeByte(1)
@@ -80,9 +79,7 @@ class FuelEntryAdapter extends TypeAdapter<FuelEntry> {
       ..writeByte(4)
       ..write(obj.pricePerUnit)
       ..writeByte(5)
-      ..write(obj.totalCost)
-      ..writeByte(6)
-      ..write(obj.calculatedMileage);
+      ..write(obj.totalCost);
   }
 
   @override

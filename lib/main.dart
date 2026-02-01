@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:myapp/models/models.dart';
+import 'package:myapp/models.dart';
 import 'package:myapp/screens/add_fuel_entry_screen.dart';
 import 'package:myapp/screens/dashboard_screen.dart';
 import 'package:myapp/screens/garage_screen.dart';
@@ -10,6 +10,7 @@ import 'package:myapp/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(VehicleAdapter());
   Hive.registerAdapter(FuelEntryAdapter());
@@ -116,41 +117,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  final PageController _pageController = PageController();
 
-  void _onTapped(int index) {
+  static const List<Widget> _widgetOptions = <Widget>[
+    DashboardScreen(),
+    GarageScreen(),
+    LogsScreen(),
+    SettingsScreen(),
+  ];
+
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.ease,
-    );
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        children: const [
-          DashboardScreen(),
-          GarageScreen(),
-          LogsScreen(),
-          SettingsScreen(),
-        ],
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -167,26 +152,26 @@ class _HomePageState extends State<HomePage> {
         notchMargin: 8.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
+          children: <Widget>[
             IconButton(
               icon: const Icon(Icons.dashboard),
-              onPressed: () => _onTapped(0),
+              onPressed: () => _onItemTapped(0),
               color: _selectedIndex == 0 ? Theme.of(context).colorScheme.primary : Colors.grey,
             ),
             IconButton(
               icon: const Icon(Icons.car_rental),
-              onPressed: () => _onTapped(1),
+              onPressed: () => _onItemTapped(1),
               color: _selectedIndex == 1 ? Theme.of(context).colorScheme.primary : Colors.grey,
             ),
-            const SizedBox(width: 48),
+            const SizedBox(width: 48), // The space for the floating action button
             IconButton(
               icon: const Icon(Icons.list_alt),
-              onPressed: () => _onTapped(2),
+              onPressed: () => _onItemTapped(2),
               color: _selectedIndex == 2 ? Theme.of(context).colorScheme.primary : Colors.grey,
             ),
             IconButton(
               icon: const Icon(Icons.settings),
-              onPressed: () => _onTapped(3),
+              onPressed: () => _onItemTapped(3),
               color: _selectedIndex == 3 ? Theme.of(context).colorScheme.primary : Colors.grey,
             ),
           ],
