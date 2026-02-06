@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/main.dart';
 import 'package:provider/provider.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -97,47 +97,117 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: ListView(
-        children: <Widget>[
-          ListTile(
-            title: const Text('Appearance'),
-            subtitle: const Text('Change the look and feel of the app'),
-            leading: const Icon(Icons.palette),
-            onTap: () {
-              // Placeholder for a dedicated appearance screen if needed
-            },
-          ),
-          SwitchListTile(
-            title: const Text('Dark Mode'),
-            subtitle: const Text('Enable or disable the dark theme'),
-            secondary: const Icon(Icons.dark_mode),
-            value: themeProvider.themeMode == ThemeMode.dark,
-            onChanged: (bool value) {
-              themeProvider.toggleTheme();
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text('Data Management'),
-            subtitle: const Text('Export or clear your data'),
-            leading: const Icon(Icons.storage),
-            onTap: () {
-              // Placeholder for a dedicated data management screen if needed
-            },
-          ),
-          ListTile(
-            title: const Text('Export to CSV'),
-            subtitle: const Text('Save all your data to a CSV file'),
-            leading: const Icon(Icons.download),
-            onTap: _exportData,
-          ),
-          ListTile(
-            title: const Text('Clear All Data'),
-            subtitle: const Text('Permanently delete all entries'),
-            leading: const Icon(Icons.delete_forever, color: Colors.redAccent),
-            onTap: _clearData,
-          ),
-        ],
+      body: ValueListenableBuilder<Box<Settings>>(
+        valueListenable: Hive.box<Settings>('settings').listenable(),
+        builder: (context, box, _) {
+          final settings = box.get('user_settings')!;
+
+          return ListView(
+            children: <Widget>[
+              ListTile(
+                title: const Text('Appearance'),
+                subtitle: const Text('Change the look and feel of the app'),
+                leading: const Icon(Icons.palette),
+                onTap: () {
+                  // Placeholder for a dedicated appearance screen if needed
+                },
+              ),
+              SwitchListTile(
+                title: const Text('Dark Mode'),
+                subtitle: const Text('Enable or disable the dark theme'),
+                secondary: const Icon(Icons.dark_mode),
+                value: themeProvider.themeMode == ThemeMode.dark,
+                onChanged: (bool value) {
+                  themeProvider.toggleTheme();
+                },
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text('Units'),
+                subtitle: const Text('Set your preferred units for fuel and distance'),
+                leading: const Icon(Icons.straighten),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(labelText: 'Fuel Unit', border: OutlineInputBorder()),
+                  value: settings.fuelUnit,
+                  items: ['Liters', 'Gallons']
+                      .map((label) => DropdownMenuItem(
+                            value: label,
+                            child: Text(label),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      settings.fuelUnit = value;
+                      settings.save();
+                    }
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(labelText: 'Distance Unit', border: OutlineInputBorder()),
+                  value: settings.distanceUnit,
+                  items: ['Kilometers', 'Miles']
+                      .map((label) => DropdownMenuItem(
+                            value: label,
+                            child: Text(label),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      settings.distanceUnit = value;
+                      settings.save();
+                    }
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(labelText: 'Consumption Unit', border: OutlineInputBorder()),
+                  value: settings.consumptionUnit,
+                  items: ['MPG', 'L/100km', 'km/L']
+                      .map((label) => DropdownMenuItem(
+                            value: label,
+                            child: Text(label),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      settings.consumptionUnit = value;
+                      settings.save();
+                    }
+                  },
+                ),
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text('Data Management'),
+                subtitle: const Text('Export or clear your data'),
+                leading: const Icon(Icons.storage),
+                onTap: () {
+                  // Placeholder for a dedicated data management screen if needed
+                },
+              ),
+              ListTile(
+                title: const Text('Export to CSV'),
+                subtitle: const Text('Save all your data to a CSV file'),
+                leading: const Icon(Icons.download),
+                onTap: _exportData,
+              ),
+              ListTile(
+                title: const Text('Clear All Data'),
+                subtitle: const Text('Permanently delete all entries'),
+                leading: const Icon(Icons.delete_forever, color: Colors.redAccent),
+                onTap: _clearData,
+              ),
+            ],
+          );
+        },
       ),
     );
   }

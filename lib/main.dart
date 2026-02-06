@@ -14,8 +14,15 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(VehicleAdapter());
   Hive.registerAdapter(FuelEntryAdapter());
+  Hive.registerAdapter(SettingsAdapter());
   await Hive.openBox<Vehicle>('vehicles');
   await Hive.openBox<FuelEntry>('fuel_entries');
+  final settingsBox = await Hive.openBox<Settings>('settings');
+
+  if (settingsBox.isEmpty) {
+    await settingsBox.put('user_settings', Settings());
+  }
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),

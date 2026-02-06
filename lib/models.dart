@@ -49,3 +49,15 @@ class FuelEntry extends HiveObject {
   @HiveField(5)
   double? totalCost;
 }
+
+@HiveType(typeId: 3)
+class Settings extends HiveObject {
+  @HiveField(0)
+  String fuelUnit = 'Liters';
+
+  @HiveField(1)
+  String distanceUnit = 'Kilometers';
+
+  @HiveField(2)
+  String consumptionUnit = 'km/L';
+}
