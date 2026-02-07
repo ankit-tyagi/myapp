@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:myapp/constants.dart';
 import 'package:myapp/models.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/screens/edit_fuel_entry_screen.dart';
@@ -82,6 +83,13 @@ class LogsScreenState extends State<LogsScreen> {
               builder: (context, Box<FuelEntry> box, _) {
                 var entries = box.values.toList().cast<FuelEntry>();
                 entries.sort((a, b) => b.date.compareTo(a.date));
+                final settings = Hive.box<Settings>(
+                  'settings',
+                ).get('user_settings')!;
+                final currency = currencies.firstWhere(
+                  (c) => c.code == settings.currencyCode,
+                  orElse: () => currencies.firstWhere((c) => c.code == 'USD'),
+                );
 
                 final searchQuery = _searchController.text.toLowerCase();
                 if (searchQuery.isNotEmpty) {
@@ -123,7 +131,7 @@ class LogsScreenState extends State<LogsScreen> {
                         ),
                         title: Text(DateFormat.yMMMd().format(entry.date)),
                         subtitle: Text(
-                          '${vehicle?.name ?? 'N/A'}: ${entry.fuelQuantity} L at \$${entry.pricePerUnit?.toStringAsFixed(2)} - Odo: ${entry.odometer} km',
+                          '${vehicle?.name ?? 'N/A'}: ${entry.fuelQuantity} ${settings.fuelUnit} at ${currency.symbol}${entry.pricePerUnit?.toStringAsFixed(2)}/${settings.fuelUnit} - Odo: ${entry.odometer} ${settings.distanceUnit}',
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
