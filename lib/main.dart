@@ -86,9 +86,13 @@ class MyApp extends StatelessWidget {
       ),
       textTheme: appTextTheme,
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Colors.black, // Darker background for AppBar in dark mode
         foregroundColor: Colors.white,
-        titleTextStyle: GoogleFonts.oswald(fontSize: 24, fontWeight: FontWeight.bold),
+        titleTextStyle: GoogleFonts.oswald(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.white, // Ensure title is white
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(

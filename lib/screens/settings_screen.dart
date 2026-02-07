@@ -6,6 +6,7 @@ import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:myapp/models.dart';
+import 'package:myapp/constants.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -15,6 +16,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  // ... (Export and Clear data methods remain same)
   Future<void> _exportData() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final vehicleBox = Hive.box<Vehicle>('vehicles');
@@ -34,6 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     for (var entry in fuelBox.values) {
       final vehicle = vehicleBox.get(entry.vehicleId);
+      // ... (rest of export logic)
       rows.add([
         vehicle?.name ?? 'N/A',
         vehicle?.fuelType ?? 'N/A',
@@ -108,9 +111,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 title: const Text('Appearance'),
                 subtitle: const Text('Change the look and feel of the app'),
                 leading: const Icon(Icons.palette),
-                onTap: () {
-                  // Placeholder for a dedicated appearance screen if needed
-                },
               ),
               SwitchListTile(
                 title: const Text('Dark Mode'),
@@ -123,15 +123,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const Divider(),
               ListTile(
-                title: const Text('Units'),
-                subtitle: const Text('Set your preferred units for fuel and distance'),
+                title: const Text('Units & Currency'),
+                subtitle: const Text('Set your preferred units and currency'),
                 leading: const Icon(Icons.straighten),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: DropdownButtonFormField<String>(
                   decoration: const InputDecoration(labelText: 'Fuel Unit', border: OutlineInputBorder()),
-                  value: settings.fuelUnit,
+                  initialValue: settings.fuelUnit,
                   items: ['Liters', 'Gallons']
                       .map((label) => DropdownMenuItem(
                             value: label,
@@ -150,7 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: DropdownButtonFormField<String>(
                   decoration: const InputDecoration(labelText: 'Distance Unit', border: OutlineInputBorder()),
-                  value: settings.distanceUnit,
+                  initialValue: settings.distanceUnit,
                   items: ['Kilometers', 'Miles']
                       .map((label) => DropdownMenuItem(
                             value: label,
@@ -169,7 +169,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: DropdownButtonFormField<String>(
                   decoration: const InputDecoration(labelText: 'Consumption Unit', border: OutlineInputBorder()),
-                  value: settings.consumptionUnit,
+                  initialValue: settings.consumptionUnit,
                   items: ['MPG', 'L/100km', 'km/L']
                       .map((label) => DropdownMenuItem(
                             value: label,
@@ -184,14 +184,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(labelText: 'Currency', border: OutlineInputBorder()),
+                  initialValue: settings.currencyCode,
+                  items: currencies
+                      .map((currency) => DropdownMenuItem(
+                            value: currency.code,
+                            child: Text('${currency.name} (${currency.symbol})'),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      settings.currencyCode = value;
+                      settings.save();
+                    }
+                  },
+                ),
+              ),
               const Divider(),
               ListTile(
                 title: const Text('Data Management'),
                 subtitle: const Text('Export or clear your data'),
                 leading: const Icon(Icons.storage),
-                onTap: () {
-                  // Placeholder for a dedicated data management screen if needed
-                },
               ),
               ListTile(
                 title: const Text('Export to CSV'),

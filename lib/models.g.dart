@@ -121,19 +121,22 @@ class SettingsAdapter extends TypeAdapter<Settings> {
     return Settings()
       ..fuelUnit = fields[0] as String
       ..distanceUnit = fields[1] as String
-      ..consumptionUnit = fields[2] as String;
+      ..consumptionUnit = fields[2] as String
+      ..currencyCode = fields[3] as String;
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.fuelUnit)
       ..writeByte(1)
       ..write(obj.distanceUnit)
       ..writeByte(2)
-      ..write(obj.consumptionUnit);
+      ..write(obj.consumptionUnit)
+      ..writeByte(3)
+      ..write(obj.currencyCode);
   }
 
   @override

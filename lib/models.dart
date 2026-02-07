@@ -60,4 +60,7 @@ class Settings extends HiveObject {
 
   @HiveField(2)
   String consumptionUnit = 'km/L';
+
+  @HiveField(3)
+  String currencyCode = 'USD';
 }
