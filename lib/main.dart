@@ -37,7 +37,9 @@ class ThemeProvider with ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
 
   void toggleTheme() {
-    _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    _themeMode = _themeMode == ThemeMode.light
+        ? ThemeMode.dark
+        : ThemeMode.light;
     notifyListeners();
   }
 }
@@ -50,7 +52,10 @@ class MyApp extends StatelessWidget {
     const Color primarySeedColor = Colors.deepPurple;
 
     final TextTheme appTextTheme = TextTheme(
-      displayLarge: GoogleFonts.oswald(fontSize: 57, fontWeight: FontWeight.bold),
+      displayLarge: GoogleFonts.oswald(
+        fontSize: 57,
+        fontWeight: FontWeight.bold,
+      ),
       titleLarge: GoogleFonts.roboto(fontSize: 22, fontWeight: FontWeight.w500),
       bodyMedium: GoogleFonts.openSans(fontSize: 14),
     );
@@ -65,7 +70,10 @@ class MyApp extends StatelessWidget {
       appBarTheme: AppBarTheme(
         backgroundColor: primarySeedColor,
         foregroundColor: Colors.white,
-        titleTextStyle: GoogleFonts.oswald(fontSize: 24, fontWeight: FontWeight.bold),
+        titleTextStyle: GoogleFonts.oswald(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -73,7 +81,10 @@ class MyApp extends StatelessWidget {
           backgroundColor: primarySeedColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+          textStyle: GoogleFonts.roboto(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );
@@ -86,7 +97,8 @@ class MyApp extends StatelessWidget {
       ),
       textTheme: appTextTheme,
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.black, // Darker background for AppBar in dark mode
+        backgroundColor:
+            Colors.black, // Darker background for AppBar in dark mode
         foregroundColor: Colors.white,
         titleTextStyle: GoogleFonts.oswald(
           fontSize: 24,
@@ -100,7 +112,10 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.deepPurple.shade200,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+          textStyle: GoogleFonts.roboto(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );
@@ -145,9 +160,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -167,23 +180,33 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               icon: const Icon(Icons.dashboard),
               onPressed: () => _onItemTapped(0),
-              color: _selectedIndex == 0 ? Theme.of(context).colorScheme.primary : Colors.grey,
+              color: _selectedIndex == 0
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
             ),
             IconButton(
               icon: const Icon(Icons.car_rental),
               onPressed: () => _onItemTapped(1),
-              color: _selectedIndex == 1 ? Theme.of(context).colorScheme.primary : Colors.grey,
+              color: _selectedIndex == 1
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
             ),
-            const SizedBox(width: 48), // The space for the floating action button
+            const SizedBox(
+              width: 48,
+            ), // The space for the floating action button
             IconButton(
               icon: const Icon(Icons.list_alt),
               onPressed: () => _onItemTapped(2),
-              color: _selectedIndex == 2 ? Theme.of(context).colorScheme.primary : Colors.grey,
+              color: _selectedIndex == 2
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
             ),
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () => _onItemTapped(3),
-              color: _selectedIndex == 3 ? Theme.of(context).colorScheme.primary : Colors.grey,
+              color: _selectedIndex == 3
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
             ),
           ],
         ),

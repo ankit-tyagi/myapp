@@ -31,7 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       'Odometer',
       'Fuel Quantity',
       'Price Per Unit',
-      'Total Cost'
+      'Total Cost',
     ]);
 
     for (var entry in fuelBox.values) {
@@ -68,14 +68,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return AlertDialog(
           title: const Text('Clear All Data'),
           content: const Text(
-              'Are you sure you want to delete all vehicles and fuel entries? This action cannot be undone.'),
+            'Are you sure you want to delete all vehicles and fuel entries? This action cannot be undone.',
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
               onPressed: () => Navigator.of(dialogContext).pop(),
             ),
             TextButton(
-              child: const Text('Clear Data', style: TextStyle(color: Colors.red)),
+              child: const Text(
+                'Clear Data',
+                style: TextStyle(color: Colors.red),
+              ),
               onPressed: () async {
                 final navigator = Navigator.of(dialogContext);
                 await Hive.box<Vehicle>('vehicles').clear();
@@ -97,9 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: ValueListenableBuilder<Box<Settings>>(
         valueListenable: Hive.box<Settings>('settings').listenable(),
         builder: (context, box, _) {
@@ -128,15 +130,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 leading: const Icon(Icons.straighten),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Fuel Unit', border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                    labelText: 'Fuel Unit',
+                    border: OutlineInputBorder(),
+                  ),
                   initialValue: settings.fuelUnit,
                   items: ['Liters', 'Gallons']
-                      .map((label) => DropdownMenuItem(
-                            value: label,
-                            child: Text(label),
-                          ))
+                      .map(
+                        (label) =>
+                            DropdownMenuItem(value: label, child: Text(label)),
+                      )
                       .toList(),
                   onChanged: (value) {
                     if (value != null) {
@@ -147,15 +155,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Distance Unit', border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                    labelText: 'Distance Unit',
+                    border: OutlineInputBorder(),
+                  ),
                   initialValue: settings.distanceUnit,
                   items: ['Kilometers', 'Miles']
-                      .map((label) => DropdownMenuItem(
-                            value: label,
-                            child: Text(label),
-                          ))
+                      .map(
+                        (label) =>
+                            DropdownMenuItem(value: label, child: Text(label)),
+                      )
                       .toList(),
                   onChanged: (value) {
                     if (value != null) {
@@ -166,15 +180,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Consumption Unit', border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                    labelText: 'Consumption Unit',
+                    border: OutlineInputBorder(),
+                  ),
                   initialValue: settings.consumptionUnit,
                   items: ['MPG', 'L/100km', 'km/L']
-                      .map((label) => DropdownMenuItem(
-                            value: label,
-                            child: Text(label),
-                          ))
+                      .map(
+                        (label) =>
+                            DropdownMenuItem(value: label, child: Text(label)),
+                      )
                       .toList(),
                   onChanged: (value) {
                     if (value != null) {
@@ -185,15 +205,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Currency', border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                    labelText: 'Currency',
+                    border: OutlineInputBorder(),
+                  ),
                   initialValue: settings.currencyCode,
                   items: currencies
-                      .map((currency) => DropdownMenuItem(
-                            value: currency.code,
-                            child: Text('${currency.name} (${currency.symbol})'),
-                          ))
+                      .map(
+                        (currency) => DropdownMenuItem(
+                          value: currency.code,
+                          child: Text('${currency.name} (${currency.symbol})'),
+                        ),
+                      )
                       .toList(),
                   onChanged: (value) {
                     if (value != null) {
@@ -218,7 +246,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListTile(
                 title: const Text('Clear All Data'),
                 subtitle: const Text('Permanently delete all entries'),
-                leading: const Icon(Icons.delete_forever, color: Colors.redAccent),
+                leading: const Icon(
+                  Icons.delete_forever,
+                  color: Colors.redAccent,
+                ),
                 onTap: _clearData,
               ),
             ],

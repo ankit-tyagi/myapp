@@ -162,7 +162,9 @@ class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.local_gas_station),
                     ),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter the fuel quantity';
@@ -181,7 +183,9 @@ class AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.attach_money),
                     ),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(

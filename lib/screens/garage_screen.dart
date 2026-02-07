@@ -24,9 +24,7 @@ class GarageScreenState extends State<GarageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Garage'),
-      ),
+      appBar: AppBar(title: const Text('My Garage')),
       body: ValueListenableBuilder(
         valueListenable: Hive.box<Vehicle>('vehicles').listenable(),
         builder: (context, Box<Vehicle> box, _) {
@@ -45,13 +43,19 @@ class GarageScreenState extends State<GarageScreen> {
                   leading: SizedBox(
                     width: 60,
                     height: 60,
-                    child: vehicle.imagePath != null && vehicle.imagePath!.isNotEmpty
+                    child:
+                        vehicle.imagePath != null &&
+                            vehicle.imagePath!.isNotEmpty
                         ? Image.file(File(vehicle.imagePath!))
                         : Image.asset('assets/images/placeholder.png'),
                   ),
-                  title: Text(vehicle.name, style: Theme.of(context).textTheme.titleLarge),
+                  title: Text(
+                    vehicle.name,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                   subtitle: Text(
-                      '${vehicle.make ?? ''} ${vehicle.model ?? ''} (${vehicle.year?.toString() ?? ''})\n${vehicle.fuelType} | ${vehicle.mileageUnit}'),
+                    '${vehicle.make ?? ''} ${vehicle.model ?? ''} (${vehicle.year?.toString() ?? ''})\n${vehicle.fuelType} | ${vehicle.mileageUnit}',
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.redAccent),
                     onPressed: () {
@@ -120,8 +124,9 @@ class AddVehicleFormState extends State<AddVehicleForm> {
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Vehicle Name'),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Please enter a name' : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter a name'
+                    : null,
               ),
               TextFormField(
                 controller: _makeController,
@@ -143,10 +148,10 @@ class AddVehicleFormState extends State<AddVehicleForm> {
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Fuel Type'),
                 items: ['Gasoline', 'Diesel', 'Electric', 'Hybrid']
-                    .map((label) => DropdownMenuItem(
-                          value: label,
-                          child: Text(label),
-                        ))
+                    .map(
+                      (label) =>
+                          DropdownMenuItem(value: label, child: Text(label)),
+                    )
                     .toList(),
                 onChanged: (value) {
                   if (value != null) {
@@ -160,10 +165,10 @@ class AddVehicleFormState extends State<AddVehicleForm> {
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Mileage Unit'),
                 items: ['Kilometers', 'Miles']
-                    .map((label) => DropdownMenuItem(
-                          value: label,
-                          child: Text(label),
-                        ))
+                    .map(
+                      (label) =>
+                          DropdownMenuItem(value: label, child: Text(label)),
+                    )
                     .toList(),
                 onChanged: (value) {
                   if (value != null) {

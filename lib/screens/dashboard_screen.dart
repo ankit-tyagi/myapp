@@ -11,16 +11,15 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-      ),
+      appBar: AppBar(title: const Text('Dashboard')),
       body: ValueListenableBuilder(
         valueListenable: Hive.box<FuelEntry>('fuel_entries').listenable(),
         builder: (context, Box<FuelEntry> box, _) {
           if (box.values.length < 2) {
             return const Center(
               child: Text(
-                  'Not enough data yet. Add at least two fuel entries to see your stats!'),
+                'Not enough data yet. Add at least two fuel entries to see your stats!',
+              ),
             );
           }
 
@@ -29,17 +28,19 @@ class DashboardScreen extends StatelessWidget {
           final settings = Hive.box<Settings>('settings').get('user_settings')!;
           final currency = currencies.firstWhere(
             (c) => c.code == settings.currencyCode,
-            orElse: () =>
-                currencies.firstWhere((c) => c.code == 'USD'),
+            orElse: () => currencies.firstWhere((c) => c.code == 'USD'),
           );
 
           // Calculate Key Stats
           final totalEntries = entries.length;
-          final totalSpending =
-              entries.map((e) => e.totalCost ?? 0).reduce((a, b) => a + b);
+          final totalSpending = entries
+              .map((e) => e.totalCost ?? 0)
+              .reduce((a, b) => a + b);
           final totalDistance = entries.last.odometer - entries.first.odometer;
-          final totalFuel =
-              entries.skip(1).map((e) => e.fuelQuantity).reduce((a, b) => a + b);
+          final totalFuel = entries
+              .skip(1)
+              .map((e) => e.fuelQuantity)
+              .reduce((a, b) => a + b);
           final averageMileage = totalDistance / totalFuel;
 
           // Prepare Chart Data
@@ -117,8 +118,10 @@ class DashboardScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Recent Entries List
-                Text('Recent Entries',
-                    style: Theme.of(context).textTheme.headlineSmall),
+                Text(
+                  'Recent Entries',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 const SizedBox(height: 8),
                 ListView.builder(
                   shrinkWrap: true,
@@ -126,20 +129,24 @@ class DashboardScreen extends StatelessWidget {
                   itemCount: min(5, entries.length),
                   itemBuilder: (context, index) {
                     final entry = entries[entries.length - 1 - index];
-                    final vehicle =
-                        Hive.box<Vehicle>('vehicles').get(entry.vehicleId);
+                    final vehicle = Hive.box<Vehicle>(
+                      'vehicles',
+                    ).get(entry.vehicleId);
 
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       child: ListTile(
-                        leading: const Icon(Icons.local_gas_station,
-                            color: Colors.green),
+                        leading: const Icon(
+                          Icons.local_gas_station,
+                          color: Colors.green,
+                        ),
                         title: Text(vehicle?.name ?? 'Unknown Vehicle'),
                         subtitle: Text(
                           '${entry.fuelQuantity} ${settings.fuelUnit} @ ${currency.symbol}${entry.pricePerUnit?.toStringAsFixed(2)}/${settings.fuelUnit} - Odo: ${entry.odometer} ${settings.distanceUnit}',
                         ),
                         trailing: Text(
-                            '${currency.symbol}${entry.totalCost?.toStringAsFixed(2)}'),
+                          '${currency.symbol}${entry.totalCost?.toStringAsFixed(2)}',
+                        ),
                       ),
                     );
                   },
@@ -153,16 +160,21 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildStatCard(
-      String title, String value, IconData icon, Color color,
-      {bool isFullWidth = false}) {
+    String title,
+    String value,
+    IconData icon,
+    Color color, {
+    bool isFullWidth = false,
+  }) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment:
-              isFullWidth ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+          crossAxisAlignment: isFullWidth
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.center,
           children: [
             Icon(icon, size: 32, color: color),
             const SizedBox(height: 8),
@@ -192,9 +204,10 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
             chart,
           ],

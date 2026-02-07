@@ -119,10 +119,10 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Settings()
-      ..fuelUnit = fields[0] as String
-      ..distanceUnit = fields[1] as String
-      ..consumptionUnit = fields[2] as String
-      ..currencyCode = fields[3] as String;
+      ..fuelUnit = fields[0] == null ? 'Liters' : fields[0] as String
+      ..distanceUnit = fields[1] == null ? 'Kilometers' : fields[1] as String
+      ..consumptionUnit = fields[2] == null ? 'km/L' : fields[2] as String
+      ..currencyCode = fields[3] == null ? 'USD' : fields[3] as String;
   }
 
   @override

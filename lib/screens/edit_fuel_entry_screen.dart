@@ -31,10 +31,18 @@ class EditFuelEntryScreenState extends State<EditFuelEntryScreen> {
     _vehicles = vehicleBox.values.toList();
     _selectedVehicle = vehicleBox.get(widget.entry.vehicleId);
 
-    _odometerController = TextEditingController(text: widget.entry.odometer.toString());
-    _fuelQuantityController = TextEditingController(text: widget.entry.fuelQuantity.toString());
-    _pricePerUnitController = TextEditingController(text: widget.entry.pricePerUnit?.toString() ?? '');
-    _totalCostController = TextEditingController(text: widget.entry.totalCost?.toString() ?? '');
+    _odometerController = TextEditingController(
+      text: widget.entry.odometer.toString(),
+    );
+    _fuelQuantityController = TextEditingController(
+      text: widget.entry.fuelQuantity.toString(),
+    );
+    _pricePerUnitController = TextEditingController(
+      text: widget.entry.pricePerUnit?.toString() ?? '',
+    );
+    _totalCostController = TextEditingController(
+      text: widget.entry.totalCost?.toString() ?? '',
+    );
     _selectedDate = widget.entry.date;
 
     // Add listeners to auto-calculate total cost
@@ -126,7 +134,8 @@ class EditFuelEntryScreenState extends State<EditFuelEntryScreen> {
                     _selectedVehicle = newValue;
                   });
                 },
-                validator: (value) => value == null ? 'Please select a vehicle' : null,
+                validator: (value) =>
+                    value == null ? 'Please select a vehicle' : null,
               ),
               const SizedBox(height: 16),
 
@@ -159,7 +168,9 @@ class EditFuelEntryScreenState extends State<EditFuelEntryScreen> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.local_gas_station),
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the fuel quantity';
@@ -180,7 +191,9 @@ class EditFuelEntryScreenState extends State<EditFuelEntryScreen> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.attach_money),
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
               ),
               const SizedBox(height: 16),
 

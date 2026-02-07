@@ -26,7 +26,9 @@ class LogsScreenState extends State<LogsScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Delete Entry'),
-          content: const Text('Are you sure you want to delete this fuel entry?'),
+          content: const Text(
+            'Are you sure you want to delete this fuel entry?',
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -57,9 +59,7 @@ class LogsScreenState extends State<LogsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fuel Logs'),
-      ),
+      appBar: AppBar(title: const Text('Fuel Logs')),
       body: Column(
         children: [
           Padding(
@@ -86,10 +86,15 @@ class LogsScreenState extends State<LogsScreen> {
                 final searchQuery = _searchController.text.toLowerCase();
                 if (searchQuery.isNotEmpty) {
                   entries = entries.where((entry) {
-                    final vehicle = Hive.box<Vehicle>('vehicles').get(entry.vehicleId);
+                    final vehicle = Hive.box<Vehicle>(
+                      'vehicles',
+                    ).get(entry.vehicleId);
                     final vehicleName = vehicle?.name.toLowerCase() ?? '';
-                    final date = DateFormat.yMMMd().format(entry.date).toLowerCase();
-                    return vehicleName.contains(searchQuery) || date.contains(searchQuery);
+                    final date = DateFormat.yMMMd()
+                        .format(entry.date)
+                        .toLowerCase();
+                    return vehicleName.contains(searchQuery) ||
+                        date.contains(searchQuery);
                   }).toList();
                 }
 
@@ -101,12 +106,21 @@ class LogsScreenState extends State<LogsScreen> {
                   itemCount: entries.length,
                   itemBuilder: (context, index) {
                     final entry = entries[index];
-                    final vehicle = Hive.box<Vehicle>('vehicles').get(entry.vehicleId);
+                    final vehicle = Hive.box<Vehicle>(
+                      'vehicles',
+                    ).get(entry.vehicleId);
 
                     return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       child: ListTile(
-                        leading: const Icon(Icons.receipt, size: 40, color: Colors.blueAccent),
+                        leading: const Icon(
+                          Icons.receipt,
+                          size: 40,
+                          color: Colors.blueAccent,
+                        ),
                         title: Text(DateFormat.yMMMd().format(entry.date)),
                         subtitle: Text(
                           '${vehicle?.name ?? 'N/A'}: ${entry.fuelQuantity} L at \$${entry.pricePerUnit?.toStringAsFixed(2)} - Odo: ${entry.odometer} km',
@@ -119,7 +133,10 @@ class LogsScreenState extends State<LogsScreen> {
                               onPressed: () => _editEntry(context, entry),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.redAccent),
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.redAccent,
+                              ),
                               onPressed: () => _deleteEntry(context, entry),
                             ),
                           ],
